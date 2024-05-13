@@ -1,0 +1,3 @@
+Server=(local);uid=sa;pwd=12345;Database=QuanLiSinhVien;Trusted_Connection=True
+
+dotnet ef dbcontext scaffold "server =(local); database=QuanLiSinhVien;uid=sa;pwd=12345; TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models/Entities
