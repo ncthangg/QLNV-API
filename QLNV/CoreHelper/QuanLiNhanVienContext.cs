@@ -32,6 +32,7 @@ public partial class QuanLiNhanVienContext : DbContext
     public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
     public virtual DbSet<ResponseLogin> ResponseLogin { get; set; }
+    public virtual DbSet<JwtTokens> JwtTokens { get; set; }
 
 
     private string? GetConnectionString()

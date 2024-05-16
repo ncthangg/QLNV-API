@@ -12,7 +12,6 @@ namespace QLNV.Models.Entities
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public int? RoleId { get; set; }
-
         public virtual User User { get; set; } = null!;
 
     }

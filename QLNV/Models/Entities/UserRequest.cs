@@ -9,11 +9,11 @@ public partial class UserRequest
 
     public string UserId { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
-
     public string? Reason { get; set; }
 
-    public string? Attachment { get; set; }
+    public string AttachmentPath { get; set; }
+    public string AttachmentName { get; set; }
+    public string AttachmentContentType { get; set; }
 
     public DateTime? DayTime { get; set; }
 

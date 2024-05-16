@@ -35,6 +35,7 @@ namespace QLNV.Services
 
         public IEnumerable<UserDto> GetAllUser()
         {
+            var roleUser = _userRepository.GetAllUser();
             IEnumerable<User> users = _userRepository.GetAllUser();
             IEnumerable<UserDto> userDto = _mapper.Map<IEnumerable<UserDto>>(users);
             return userDto;

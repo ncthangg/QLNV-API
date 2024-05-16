@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using static QLNV.CoreHelper.Enum.ApplicationEnum;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QLNV.Models.Entities;
 
@@ -35,9 +37,13 @@ public partial class User
 
     public virtual Role Role { get; set; } = null!;
 
+    public bool IsActive { get; set; } = false;
+
     public virtual ICollection<Salary> Salaries { get; set; } = new List<Salary>();
 
     public virtual ICollection<UserRequest> UserRequests { get; set; } = new List<UserRequest>();
 
     public virtual ICollection<Claim> ClaimsClaims { get; set; } = new List<Claim>();
+
+    
 }

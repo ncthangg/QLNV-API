@@ -6,6 +6,8 @@ namespace QLNV
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
             var startup = new Startup(builder, builder.Environment);
 
             startup.ConfigureServices(builder.Services);

@@ -15,7 +15,7 @@ namespace QLNV.Repositories
     public class SalaryRepository : ISalaryRepository
     {
         
-        private QuanLiNhanVienContext _context;
+        private  QuanLiNhanVienContext _context;
 
         public SalaryRepository(QuanLiNhanVienContext context)
         {

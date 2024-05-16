@@ -57,19 +57,27 @@ namespace QLNV
 
             AddDI(services);
 
+            var connectionString = _configuration["ConnectionStrings:DefaultConnectionStringDB"];
+
             services.AddDbContext<QuanLiNhanVienContext>(options =>
-            options.UseSqlServer(_configuration.GetConnectionString("DefaultConnectionStringDB"))
+            options.UseSqlServer(_configuration.GetConnectionString("connectionString"))
             );
+
+            var key = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
 
             services.AddAuthentication("Bearer").AddJwtBearer(o =>
             {
                 o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ValidateLifetime = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sadasdasjdacbjasdnajscnajacacajjcs"))
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                 };
             });
 
@@ -111,6 +119,8 @@ namespace QLNV
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<JwtRefreshMiddleware>();
+            app.UseMiddleware<TokenValidationMiddleware>();
         }
     }
 }

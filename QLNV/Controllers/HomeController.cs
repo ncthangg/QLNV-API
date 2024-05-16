@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QLNV.Models.DTOs;
 using QLNV.Models.Entities;
 using QLNV.Services;
+using System.Security.Claims;
+using static QLNV.Services.AuthenticationService;
 
 namespace QLSV.Controllers
 {
@@ -18,16 +21,17 @@ namespace QLSV.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [Route("/api/[controller]/get-all-user")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles ="1")]
+        [Route("/api/[controller]/Accounts/get-all-user")]
         public IEnumerable<UserDto> GetAllUser()
         {
-            var users = _adminService.GetAllUser();
-            return users;
+                var users = _adminService.GetAllUser();
+                return users;
         }
 
         [HttpGet]
-        [Route("/api/[controller]/get-user/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Route("/api/[controller]/Accounts/get-user/{id}")]
         public IActionResult GetUserByID(string id)
         {
             var usersDto = _adminService.GetUserById(id);
@@ -40,7 +44,8 @@ namespace QLSV.Controllers
         }
 
         [HttpPost]
-        [Route("/api/[controller]/create-user")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/create-user")]
         public IActionResult CreateUser([FromBody] UserDto userDto)
         {
             try
@@ -53,8 +58,10 @@ namespace QLSV.Controllers
                 return StatusCode(500, $"Error creating user: {ex.Message}");
             }
         }
+
         [HttpDelete]
-        [Route("/api/[controller]/delete-user/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/delete-user/{id}")]
         public IActionResult DeleteUser(string id)
         {
             try
@@ -68,7 +75,8 @@ namespace QLSV.Controllers
             }
         }
         [HttpPut]
-        [Route("/api/[controller]/update-user/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/update-user/{id}")]
         public IActionResult UpdateUser(string id, [FromBody] UserDto newDto)
         {
             try
@@ -91,7 +99,8 @@ namespace QLSV.Controllers
         }
 
         [HttpGet]
-        [Route("/api/[controller]/get-salary")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/get-salary")]
         public IEnumerable<SalaryDto> GetSalary()
         {
             var salary = _adminService.GetSalary();
@@ -99,7 +108,8 @@ namespace QLSV.Controllers
         }
 
         [HttpGet]
-        [Route("/api/[controller]/get-salary/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "2")]
+        [Route("/api/[controller]/Accounts/get-salary/{id}")]
         public IActionResult GetSalaryById(string id)
         {
             try
@@ -119,7 +129,8 @@ namespace QLSV.Controllers
         }
 
         [HttpPost]
-        [Route("/api/[controller]/add-salary")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/add-salary")]
         public IActionResult AddSalary([FromBody] SalaryDto salaryDto)
         {
             try
@@ -133,7 +144,8 @@ namespace QLSV.Controllers
             }
         }
         [HttpPut]
-        [Route("/api/[controller]/update-salary")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/Accounts/update-salary")]
         public IActionResult UpdateSalary(string userId, [FromBody] SalaryDto salaryDto)
         {
             try
@@ -151,18 +163,89 @@ namespace QLSV.Controllers
         [Route("/api/[controller]/login")]
         public IActionResult Login([FromBody] RequestLoginDto requestLoginDto)
         {
-            ResponseLogin responseLogin = _authenticationService.Login(requestLoginDto);
+            try
+            {
+                ResponseLogin responseLogin = _authenticationService.Login(requestLoginDto);
 
-            if (responseLogin != null)
-            {
-               // _authenticationService.SaveToken(responseLogin);
-                return Ok(responseLogin);
+                if (responseLogin != null)
+                {
+                    // _authenticationService.SaveToken(responseLogin);
+                    return Ok(responseLogin);
+                }
+                //else
+                //{
+                //    return Unauthorized("Invalid username or password");
+                //}
             }
-            else
+            catch (UserNotVerifiedException ex)
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new { message = "Invalid username or password" });
+            }
+            return StatusCode(500, $"Error logging user");
+        }
+
+        [HttpPost]
+        [Route("/api/[controller]/register")]
+        public IActionResult Register([FromBody] RegisterUserDto registerUserDto)
+        {
+            try
+            {
+                _authenticationService.Register(registerUserDto);
+                return Ok("User created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating user: {ex.Message}");
             }
         }
 
+
+        [HttpPost]
+        [Route("/api/[controller]/verify")]
+        public IActionResult VerifyOTP([FromBody] VerifyDto verifyDto)
+        {
+            try
+            {
+                var isOTPValid = _authenticationService.VerifyOTP(verifyDto.UserId, verifyDto.VerificationToken);
+                if (isOTPValid)
+                {
+                    return Ok("OTP is valid");
+                }
+                else
+                {
+                    return BadRequest("Invalid OTP");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating user: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Route("/api/[controller]/verify")]
+        public IActionResult SendRequest([FromBody] UserRequestDto userRequestDto)
+        {
+            try
+            {
+                
+                if (isOTPValid)
+                {
+                    return Ok("OTP is valid");
+                }
+                else
+                {
+                    return BadRequest("Invalid OTP");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating user: {ex.Message}");
+            }
+        }
     }
 }
