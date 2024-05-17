@@ -45,6 +45,18 @@ namespace QLNV.CoreHelper
             .ForMember(dest => dest.ContractSalary, opt => opt.MapFrom(src => src.ContractSalary))
             .ForMember(dest => dest.DayOff, opt => opt.MapFrom(src => src.DayOff));
             //.ForMember(dest => dest.TotalSalary, opt => opt.MapFrom(src => src.TotalSalary));
+            CreateMap<UserRequest, UserRequestDtoGet>()
+.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+.ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
+.ForMember(dest => dest.AttachmentName, opt => opt.MapFrom(src => src.AttachmentName))
+.ForMember(dest => dest.DayTime, opt => opt.MapFrom(src => src.DayTime));
+            CreateMap<UserRequestDtoGet, UserRequest>()
+.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+.ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
+.ForMember(dest => dest.AttachmentName, opt => opt.MapFrom(src => src.AttachmentName))
+.ForMember(dest => dest.DayTime, opt => opt.MapFrom(src => src.DayTime));
+
+
         }
 
     }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Y2VAHfrLAQ7uRrJ3G1AiTf2E9Hk4GJwQTCrE4bSyj656mPgvZcC9sao8JjxG4kuyDWWnvprIrb0U7n+JuMGR2Q==",
+  "dgSpecHash": "TqekvMAFYXD00Nu4C1/Zw9auak05K+IBcENd5IU5qxdQ0KClaIDZ+6625WmS8Kp/cTrnc0l4tEXhczYxc9v2eg==",
   "success": true,
-  "projectFilePath": "D:\\Study\\.net core\\QLSV\\QLNV\\QLNV.csproj",
+  "projectFilePath": "D:\\Study\\.net core\\QLNV\\QLNV\\QLNV.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

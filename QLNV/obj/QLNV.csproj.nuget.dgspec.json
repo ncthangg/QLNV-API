@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Study\\.net core\\QLSV\\QLNV\\QLNV.csproj": {}
+    "D:\\Study\\.net core\\QLNV\\QLNV\\QLNV.csproj": {}
   },
   "projects": {
-    "D:\\Study\\.net core\\QLSV\\QLNV\\QLNV.csproj": {
+    "D:\\Study\\.net core\\QLNV\\QLNV\\QLNV.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Study\\.net core\\QLSV\\QLNV\\QLNV.csproj",
+        "projectUniqueName": "D:\\Study\\.net core\\QLNV\\QLNV\\QLNV.csproj",
         "projectName": "QLNV",
-        "projectPath": "D:\\Study\\.net core\\QLSV\\QLNV\\QLNV.csproj",
+        "projectPath": "D:\\Study\\.net core\\QLNV\\QLNV\\QLNV.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\Study\\.net core\\QLSV\\QLNV\\obj\\",
+        "outputPath": "D:\\Study\\.net core\\QLNV\\QLNV\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",

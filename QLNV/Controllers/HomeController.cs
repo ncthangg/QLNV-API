@@ -1,9 +1,11 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using QLNV.Models.DTOs;
 using QLNV.Models.Entities;
 using QLNV.Services;
+using System.Net.WebSockets;
 using System.Security.Claims;
 using static QLNV.Services.AuthenticationService;
 
@@ -14,10 +16,12 @@ namespace QLSV.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly IAuthenticationService _authenticationService;
-        public HomeController(IAdminService adminService, IAuthenticationService authenticationService)
+        private readonly IRequestService _requestService;
+        public HomeController(IAdminService adminService, IAuthenticationService authenticationService, IRequestService requestService)
         {
             _adminService = adminService;
             _authenticationService = authenticationService;
+            _requestService = requestService;
         }
 
         [HttpGet]
@@ -227,25 +231,48 @@ namespace QLSV.Controllers
         }
 
         [HttpPost]
-        [Route("/api/[controller]/verify")]
-        public IActionResult SendRequest([FromBody] UserRequestDto userRequestDto)
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "2")]
+        [Route("/api/[controller]/send-request")]
+        public IActionResult SendRequest(UserRequestDto userRequestDto)
         {
             try
             {
-                
-                if (isOTPValid)
-                {
-                    return Ok("OTP is valid");
-                }
-                else
-                {
-                    return BadRequest("Invalid OTP");
-                }
+                _requestService.SendRequest(userRequestDto);
+                return Ok("Request submitted successfully!");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error creating user: {ex.Message}");
+                return StatusCode(500, $"Error send request: {ex.Message}");
             }
+        }
+        [HttpGet]
+        [Route("/api/[controller]/get-list-request")]
+        public IActionResult GetAllRequest()
+        {
+            try
+            {
+                var request = _requestService.GetRequest();
+                return Ok(request);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error send request: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "1")]
+        [Route("/api/[controller]/download-file")]
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", fileName);
+            var provider = new FileExtensionContentTypeProvider();
+            if(!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(bytes, contentType, Path.GetFileName(filePath));
         }
     }
 }

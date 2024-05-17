@@ -52,8 +52,8 @@ namespace QLNV
                 options.LowercaseQueryStrings = false;
             });
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(Startup));
 
             AddDI(services);
 
@@ -89,7 +89,9 @@ namespace QLNV
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISalaryRepository, SalaryRepository>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-        }
+            services.AddScoped<IUserRequestRepository, UserRequestRepository>();
+            services.AddScoped<IRequestService, RequestService>();
+        }   
 
         ///=======================================================
         public void Configure(WebApplication app, IWebHostEnvironment env)
